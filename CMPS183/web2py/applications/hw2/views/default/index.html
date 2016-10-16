@@ -1,13 +1,14 @@
 {{extend 'layout.html'}}
 
 <div class="post_listing center">
+<!--check if user login----------------------------------------------------------------------------->
 {{if auth.user_id:}}
-
     <div class="post_list_header text-right">
         <a href="{{=URL('default', 'edit')}}" class="btn btn-warning">
             <i class="fa fa-plus"></i> New Post
         </a>
     </div>
+
 
 
 {{else:}}
@@ -19,30 +20,45 @@
 {{pass}}
 
     <div class="post_list">
+
+     <!-- Display all the posts--------------------------------------------------------------------------- -->
     {{for p in posts:}}
 
         <div class="post">
             <!-- Here goes the code to display an individual post. The code below is just a placeholder. -->
-          <a href="{{=URL('default', 'edit', args=[p.id])}}">
+          <a href="{{=URL('default', 'edit', args=[p.id])}}" style="color: black">
               <div class="text-left">{{=p.post_content}}</div>
-
-
-            </a>
-            <!-- Adding user name -->
-           <div class="small form-inline">
-
-               <div class="text-left">{{=user_name(p.user_email)}}</div>
-               <div class="text-center">{{=p.updated_on}}</div>
-               <div class="text-right">{{=p.created_on}}</div>
-
+          </a>
+            <!-- Adding user name, created time, edited time-------------------------------------->
+           <div class="small form-inline" style="color: #00c4ff">
+                <!-- user name -->
+               <div style="float: left;text-align: left; padding-right: 10px;">
+               {{=user_name(p.user_email)}}</div>
+               <!-- created time -->
+               <div style=" text-align: center;">created:{{=p.created_on}}</div>
+               <!-- check if edited time == created time--------------------------------------------->
+           {{if p.created_on!=p.updated_on:}}
+                    <div style="text-align: right;padding-left: 10px;">
+                    edited:{{=p.updated_on}}</div>
+           {{else:pass}}
+            <!--------------------------------------------------------------------------------------->
+            <!-- check if user is login-------------------------------------------------------------->
+           {{if auth.user_id:}}
+               <!-- check if login email == post email --------------------------------------------->
+                {{if (p.user_email==auth.user.email):}}
+                       <div class="text-right">
+                         <a href="{{=URL('default', 'edit', args=[p.id], vars=dict(edit='true'))}}">
+                             <button type="button" class="btn btn-default btn-sm">
+                                 <span class="glyphicon glyphicon-edit"></span> Edit
+                             </button>
+                         </a>
+                       </div>
+                {{else:pass}}
+               <!--------------------------------------------------------------------------------------->
+           {{else:pass}}
+               <!--------------------------------------------------------------------------------------->
            </div>
-
         </div>
-
-
-
-
     {{pass}}
     </div>
-
 </div>
