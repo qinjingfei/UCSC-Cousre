@@ -1,12 +1,15 @@
 
 {{extend "layout.html"}}
- <div class="container">
+ <!--suppress ALL -->
+<div class="container">
 
      <div class="col-sm-6">
          <div class="panel panel-default">
-             <div class="panel-heading center " style="color: black; font-style: inherit">
-                <a href="{{=URL(r=request)}}" >
-                    <div>Start ProStudy</div>
+             <div class="panel-heading center " style="color: black; font-style: inherit" id="head">
+                 <a href="{{=URL(r=request)}}" >
+                    <p id="Demo">Start ProStudy</p>
+                     <script>document.getElementById('head').onclick=startTime()</script>
+
                  </a>
              </div>
              <div class="panel-body center">
@@ -36,3 +39,27 @@
 
      </div>
  </div>
+
+
+
+<script>
+
+    function startTime() {
+        var today = new Date();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        // add a zero in front of numbers<10
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById("Demo").innerHTML = h + ":" + m + ":" + s;
+        var t = setTimeout(function(){ startTime() }, 500);
+}
+
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+</script>
