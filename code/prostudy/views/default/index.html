@@ -1,0 +1,87 @@
+
+{{extend "layout.html"}}
+<script>
+
+    function startTime() {
+        var today = new Date();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        // add a zero in front of numbers<10
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById("Demo").innerHTML = h + ":" + m + ":" + s;
+        var t = setTimeout(function () {
+            startTime()
+        }, 500);
+    }
+
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+
+</script>
+
+
+ <!--suppress ALL -->
+<div class="container">
+
+     <div class="col-sm-6">
+         <div class="panel panel-default">
+             <div class="panel-heading center " style="color: black; font-style: inherit" id="head">
+                 <a href="{{=URL(r=request)}}" >
+                    <div id="Demo" style="color: black">Start ProStudy</div>
+                     <script>document.getElementById('head').onclick=startTime()</script>
+
+                 </a>
+             </div>
+             <div class="panel-body center">
+                 <object class="icon icon-history">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24">
+                         <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13
+                                 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97
+                                  0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path>
+                     </svg>
+                 </object>
+                 <br>
+                 No Record
+             </div>
+
+         </div>
+     </div>
+
+      <div class="col-sm-6">
+         <div class="panel panel-default">
+             <div class="panel-heading center " style="color: black; font-style: inherit">
+                 Task:
+				<input type="text" id="task" >
+				<button type="button" class="btn btn-success btn-sm" onclick=add() >add</button>
+             </div>
+
+              <div class="panel-body center">
+                  <ul id="list" class="list-group">  </ul>
+              </div>
+
+         </div>
+
+     </div>
+ </div>
+
+<script>
+
+var ul = document.getElementById("list");
+
+function add()
+{
+	var li = document.createElement("il");
+    li.innerHTML=document.getElementById('task').value;
+	li.setAttribute("class","list-group-item");
+	ul.appendChild(li);
+}
+
+
+
+</script>
