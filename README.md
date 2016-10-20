@@ -12,7 +12,7 @@ Weikai Wu(SM)
 
 Jinying Wu 
 
-**Main Development Toop:**
+**Main Development Tool:**
 Web2py
 
 --- 
