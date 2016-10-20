@@ -1,30 +1,25 @@
 
 {{extend "layout.html"}}
-<script>
 
-    function startTime() {
-        var today = new Date();
-        var h = today.getHours();
-        var m = today.getMinutes();
-        var s = today.getSeconds();
-        // add a zero in front of numbers<10
-        m = checkTime(m);
-        s = checkTime(s);
-        document.getElementById("Demo").innerHTML = h + ":" + m + ":" + s;
-        var t = setTimeout(function () {
-            startTime()
-        }, 500);
-    }
+ <!-------The following codes were written by Qin Jingfei---------------------------------------------------------------------------------------------------------------->
+<script type="text/javascript">
 
-    function checkTime(i) {
-        if (i < 10) {
-            i = "0" + i;
+    function startTimer() {
+        total = 60 * 25;
+        myClock = setInterval(function () {
+            total = total - 1;
+            document.getElementById("Demo").innerHTML = ( Math.floor(total / 60) + ":" + total % 60);
+            if (total === 0) {
+                cancelClock();
+                alert("Done");
+            }
+        }, 1000);
+        cancelClock = function () {
+            clearInterval(myClock);
         }
-        return i;
     }
 
 </script>
-
 
  <!--suppress ALL -->
 <div class="container">
@@ -34,7 +29,7 @@
              <div class="panel-heading center " style="color: black; font-style: inherit" id="head">
                  <a href="{{=URL(r=request)}}" >
                     <div id="Demo" style="color: black">Start ProStudy</div>
-                     <script>document.getElementById('head').onclick=startTime()</script>
+                     <script>document.getElementById('head').onclick=startTimer() </script>
 
                  </a>
              </div>
@@ -52,8 +47,12 @@
 
          </div>
      </div>
+<!----The codes above were written by Qin Jingfei------------------------------------------------------------------------------------------------------------------------------>
 
-      <div class="col-sm-6">
+
+
+
+    <div class="col-sm-6">
          <div class="panel panel-default">
              <div class="panel-heading center " style="color: black; font-style: inherit">
                  Task:
