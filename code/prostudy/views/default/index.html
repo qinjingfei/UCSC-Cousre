@@ -72,15 +72,33 @@
 <script>
 
 var ul = document.getElementById("list");
+var lastId=0;
 
-function add()
-{
-	var li = document.createElement("il");
-    li.innerHTML=document.getElementById('task').value;
-	li.setAttribute("class","list-group-item");
-	ul.appendChild(li);
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
 }
 
 
+    function add()
+    {
+        if(!isBlank(document.getElementById("task").value)) {
 
+
+            var iCon = document.createElement('div');
+            var li = document.createElement("il");
+            var closeSpan = document.createElement("span");
+            li.setAttribute('id',lastId);
+            iCon.className = "glyphicon glyphicon-remove";
+            closeSpan.setAttribute("class", "badge");
+            closeSpan.appendChild(iCon);
+            iCon.addEventListener("click",function(){var element=document.getElementById(li.getAttribute('id'));
+                                                    element.parentNode.removeChild(element);});
+            li.innerHTML = document.getElementById('task').value;
+            li.setAttribute("class", "list-group-item");
+            li.appendChild(closeSpan);
+            lastId++;
+            ul.appendChild(li);
+
+        }
+    }
 </script>
