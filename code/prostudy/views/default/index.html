@@ -1,37 +1,36 @@
 
-{{extend "layout.html"}}
-
- <!-------The following codes were written by Qin Jingfei---------------------------------------------------------------------------------------------------------------->
+{{extend 'layout.html'}}
+<!-------The following codes were written by Qin Jingfei---------------------------------------------------------------------------------------------------------------->
 <script type="text/javascript">
-
     function startTimer() {
         total = 60 * 25;
         myClock = setInterval(function () {
+            $("#Demo").prop("disabled","true");
             total = total - 1;
             document.getElementById("Demo").innerHTML = ( Math.floor(total / 60) + ":" + total % 60);
             if (total === 0) {
                 cancelClock();
                 alert("Done");
+             $("#Demo").prop("disabled","false");
             }
         }, 1000);
         cancelClock = function () {
             clearInterval(myClock);
         }
     }
-
 </script>
+
 
  <!--suppress ALL -->
 <div class="container">
 
-     <div class="col-sm-6">
+     <div class="col-sm-6" >
          <div class="panel panel-default">
-             <div class="panel-heading center " style="color: black; font-style: inherit" id="head">
-                 <a href="{{=URL(r=request)}}" >
-                    <div id="Demo" style="color: black">Start ProStudy</div>
-                     <script>document.getElementById('head').onclick=startTimer() </script>
+             <div class="panel-heading center "  style="font-style: inherit" >
+                 <button class="btn-default" id="Demo" onclick="startTimer()">
+                     Start ProStudy
+                 </button>
 
-                 </a>
              </div>
              <div class="panel-body center">
                  <object class="icon icon-history">
@@ -77,10 +76,9 @@ function add()
 {
 	var li = document.createElement("il");
     li.innerHTML=document.getElementById('task').value;
+    $(".input").add().checkbox;
 	li.setAttribute("class","list-group-item");
 	ul.appendChild(li);
 }
-
-
 
 </script>
