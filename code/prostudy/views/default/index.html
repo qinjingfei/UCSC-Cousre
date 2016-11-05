@@ -1,4 +1,5 @@
 
+
 {{extend 'layout.html'}}
 <!-------The following codes were written by Qin Jingfei---------------------------------------------------------------------------------------------------------------->
 <script type="text/javascript">
@@ -71,14 +72,38 @@
 <script>
 
 var ul = document.getElementById("list");
+var lastId=0;
 
-function add()
-{
-	var li = document.createElement("il");
-    li.innerHTML=document.getElementById('task').value;
-    $(".input").add().checkbox;
-	li.setAttribute("class","list-group-item");
-	ul.appendChild(li);
+function isBlank(str) {
+    return (!str || /^\s*&/.test(str));
 }
 
-</script>
+function add()
+    {
+        if(!isBlank(document.getElementById("task").value)) {
+
+
+            var iCon = document.createElement('div'); //create a div container
+            var dbtMenu=document.createElement('div');
+            var li = document.createElement("il");  //create a list-element
+            var closeSpan = document.createElement("span"); //create a span for badge attribute
+            var ClickListState=0;
+
+            dbtMenu.setAttribute("class","container");
+            //dbtMenu.appendChild(dropDownList);
+            li.setAttribute('id',lastId); // set an attribute for id
+            iCon.className = "glyphicon glyphicon-remove"; // image for remove button
+            closeSpan.setAttribute("class", "badge"); //create a new attribute for span
+            closeSpan.appendChild(iCon); // put it in the span set
+            iCon.addEventListener("click",function(){var element=document.getElementById(li.getAttribute('id'));
+                                                    element.parentNode.removeChild(element);}); //functionlity
+            li.innerHTML = document.getElementById('task').value;
+            li.setAttribute("class", "list-group-item hover-yellow");
+            li.addEventListener('click',function() {if(ClickListState==0){li.style.backgroundColor="red"; ClickListState++;}
+                                                    else {li.style.backgroundColor="white"; ClickListState--; }});
+            li.appendChild(closeSpan);
+            lastId++;
+            ul.appendChild(li);
+
+        }
+    }
