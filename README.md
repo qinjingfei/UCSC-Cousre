@@ -12,10 +12,10 @@ Weikai Wu(SM)
 
 Jinying Wu 
 
-**Main Development Toop:**
+**Main Development Tool:**
 Web2py
 
-**Main Implementation Toop (to be add):**
+**Main Implementation Files (to be add):**
 
 controllers/api.py
 
