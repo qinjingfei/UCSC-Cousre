@@ -54,6 +54,10 @@ var app = function() {
         self.vue.form_time = 25;
         self.vue.form_category = 'p';
         self.vue.is_adding_task = false;
+        setTimeout(function () {
+            self.vue.is_adding_task = true;
+            $("#vue-div").show();
+        },1);
         $("#vue-div").show();
     };
 
@@ -128,7 +132,7 @@ var app = function() {
             //
             logged_in: false,
             has_more: false,
-            is_adding_task: false
+            is_adding_task: true
         },
         methods: {
             // functions that used in index.html, defined above
