@@ -11,3 +11,42 @@ div.absolute {
     width: 50px;
     height: 50px;
 }
+
+#black {
+    color: black;
+    font-style: inherit;
+}
+
+#mcompact {
+    padding: 5px;
+    font-size: 12px;
+}
+
+#tasklist {
+    padding-bottom: 1px;
+    padding-top: 0px;
+    text-transform: uppercase;
+}
+
+#mcnocaps {
+    padding: 5px;
+    font-size: 12px;
+    text-transform: none;
+}
+
+#left {
+    float: left;
+}
+
+#right {
+    float: right;
+}
+
+.loadmore {
+    padding: 3px;
+    padding-bottom: 6px;
+}
+
+#downer {
+    padding-top: 10px;
+}
