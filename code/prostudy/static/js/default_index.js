@@ -94,30 +94,21 @@ var app = function() {
     };
 
     self.delete_task = function(task_id) {
-        $.post(del_task_url,
-            {
-                task_id: task_id
-            },
-            function () {
-                var idx = null;
-                for (var i = 0; i < self.vue.tasks.length; i++) {
-                    if (self.vue.tasks[i].id === task_id) {
-                        // If I set this to i, it won't work, as the if below will
-                        // return false for items in first position.
-                        idx = i + 1;
-                        break;
-                    }
-                }
-                if (idx) {
-                    self.vue.tasks.splice(idx - 1, 1);
-                }
-                // if less than 4 tasks displayed, get to 4
-                if (self.vue.logged_in) {
-                    self.get_data();
-                }
-
+        if (self.vue.logged_in) {
+            $.post(del_task_url, {task_id: task_id}, function () {self.get_data()});
+        }
+        var idx = null;
+        for (var i = 0; i < self.vue.tasks.length; i++) {
+            if (self.vue.tasks[i].id === task_id) {
+                // If I set this to i, it won't work, as the if below will
+                // return false for items in first position.
+                idx = i + 1;
+                break;
             }
-        );
+        }
+        if (idx) {
+            self.vue.tasks.splice(idx - 1, 1);
+        }
     };
 
     self.vue = new Vue({

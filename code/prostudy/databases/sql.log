@@ -1,4 +1,4 @@
-timestamp: 2016-10-15T12:54:27.276000
+timestamp: 2016-11-10T19:48:57.720685
 CREATE TABLE auth_user(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name CHAR(128),
@@ -10,21 +10,21 @@ CREATE TABLE auth_user(
     registration_id CHAR(512)
 );
 success!
-timestamp: 2016-10-15T12:54:27.289000
+timestamp: 2016-11-10T19:48:57.728643
 CREATE TABLE auth_group(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     role CHAR(512),
     description TEXT
 );
 success!
-timestamp: 2016-10-15T12:54:27.300000
+timestamp: 2016-11-10T19:48:57.734513
 CREATE TABLE auth_membership(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2016-10-15T12:54:27.330000
+timestamp: 2016-11-10T19:48:57.742576
 CREATE TABLE auth_permission(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
@@ -33,7 +33,7 @@ CREATE TABLE auth_permission(
     record_id INTEGER
 );
 success!
-timestamp: 2016-10-15T12:54:27.349000
+timestamp: 2016-11-10T19:48:57.750187
 CREATE TABLE auth_event(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     time_stamp TIMESTAMP,
@@ -43,7 +43,7 @@ CREATE TABLE auth_event(
     description TEXT
 );
 success!
-timestamp: 2016-10-15T12:54:27.367000
+timestamp: 2016-11-10T19:48:57.756886
 CREATE TABLE auth_cas(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
@@ -51,5 +51,16 @@ CREATE TABLE auth_cas(
     service CHAR(512),
     ticket CHAR(512),
     renew CHAR(1)
+);
+success!
+timestamp: 2016-11-10T19:48:57.773426
+CREATE TABLE task(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_email CHAR(512),
+    task_content CHAR(512),
+    category CHAR(512),
+    created_on TIMESTAMP,
+    time_used DOUBLE,
+    time_total DOUBLE
 );
 success!
