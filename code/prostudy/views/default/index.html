@@ -1,10 +1,22 @@
+{{extend "layout.html"}}
+{{block head}}
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
 
+<!--urls needed to communicate with the server-->
+<!--They are used in default_index.js-->
+<script>
+    var get_data_url = "{{=URL('api', 'get_data')}}";
+    var add_task_url = "{{=URL('api', 'add_task', user_signature=True)}}";
+    var del_task_url = "{{=URL('api', 'del_task', user_signature=True)}}";
+    var empty_form_url = "{{=URL('default', 'empty_form')}}";
+</script>
+{{end}}
 
-{{extend 'layout.html'}}
 <!-------The following codes were written by Qin Jingfei---------------------------------------------------------------------------------------------------------------->
+
 <script type="text/javascript">
-    function startTimer() {
-        total = 60 * 25;
+    function startTimer(n=25) {
+        total = 60 * n;
         myClock = setInterval(function () {
             $("#Demo").prop("disabled","true");
             total = total - 1;
@@ -21,89 +33,92 @@
     }
 </script>
 
-
  <!--suppress ALL -->
-<div class="container">
-
-     <div class="col-sm-6" >
-         <div class="panel panel-default">
-             <div class="panel-heading center "  style="font-style: inherit" >
-                 <button class="btn-default" id="Demo" onclick="startTimer()">
+<div class="container" id="vue-div">
+    <div class="col-sm-6" >
+        <div class="panel panel-default">
+            <div class="panel-heading center "  style="font-style: inherit" >
+                <button class="btn-default" id="Demo" onclick="startTimer(25)">
                      Start ProStudy
-                 </button>
+                </button>
 
-             </div>
-             <div class="panel-body center">
-                 <object class="icon icon-history">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24">
-                         <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13
+            </div>
+            <div class="panel-body center">
+                <object class="icon icon-history">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24">
+                        <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13
                                  7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97
-                                  0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path>
-                     </svg>
-                 </object>
-                 <br>
-                 No Record
-             </div>
+                                 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path>
+                    </svg>
+                </object>
+                <br>
+                No Record
+            </div>
 
-         </div>
-     </div>
+        </div>
+    </div>
 <!----The codes above were written by Qin Jingfei------------------------------------------------------------------------------------------------------------------------------>
 
 
-
-
+    <!--Weikai Wu-->
+    <!--Tasklist-->
+    <!--Extensive comment for team members who are not familiar with vue-->
     <div class="col-sm-6">
          <div class="panel panel-default">
-             <div class="panel-heading center " style="color: black; font-style: inherit">
-                 Task:
-				<input type="text" id="task" >
-				<button type="button" class="btn btn-success btn-sm" onclick=add() >add</button>
+             <!--start of the input boxes-->
+
+             <!--ADD YOUR TASK button-->
+             <!-- v-if is for conditional rendering, is_adding_task is defined in default_index.js-->
+             <div class="panel-heading center" id="black" v-if="!is_adding_task">
+                 <button class="btn btn-success btn-sm" v-on:click="is_adding_task=true">Add your task</button>
              </div>
+             <!--input boxes-->
+             <form class="panel-heading center" action="#" v-on:submit.prevent="add_task" enctype="multipart/form-data" method="post" v-if="is_adding_task">
+                 <div id="black">
+                     <!-- v-model specifies the place to store information entered -->
+                     <!-- form_category is defined in default_index.js -->
+                     <select v-model="form_category">
+                         <option value="p">Productive</option>
+                         <option value="np">Non-productive</option>
+                         <option value="n">Necessary</option>
+                     </select>
+                     Task:
+                     <input v-model="form_task" placeholder="Enter your task" type="text"/>
+                     Time:
+                     <input v-model="form_time" size="5" type="number" name="quantity" min="1" max="999"/> minutes
+                     <input class="btn btn-success btn-sm" type="submit" value="Add"/>
+                 </div>
+             </form>
+             <!--end of the input boxes-->
 
-              <div class="panel-body center">
-                  <ul id="list" class="list-group">  </ul>
-              </div>
-
+             <!--rendering tasklist-->
+             <div v-if="tasks.length!=0" class="panel-body center" id="tasklist">
+                 <ul class="list-group" id="downer">
+                     <!-- v-for is for list rendering -->
+                     <!-- tasks is defined in default_index.js -->
+                     <div v-for="task in tasks">
+                         <li class="list-group-item" id="mcompact">
+                             <div id="left">
+                                 <!--show task category in different colors-->
+                                 <span class="label label-success" v-if="task.cate=='p'">${task.cate}</span>
+                                 <span class="label label-primary" v-if="task.cate=='np'">${task.cate}</span>
+                                 <span class="label label-warning" v-if="task.cate=='n'">${task.cate}</span>
+                             </div>
+                             ${task.name}
+                             <div id="right">
+                                 <i class="glyphicon glyphicon-remove" v-on:click="delete_task(task.id)"></i>
+                             </div>
+                         </li>
+                     </div>
+                     <div class="loadmore" v-if="has_more">
+                         <button class="btn btn-default" id="left" v-on:click="get_more">Load more</button>
+                     </div>
+                 </ul>
+             </div>
          </div>
+    </div>
+</div>
 
-     </div>
- </div>
+        <!-- js source -->
+<script src="{{=URL('static', 'js/default_index.js')}}"></script>
 
-<script>
-
-var ul = document.getElementById("list");
-var lastId=0;
-
-function isBlank(str) {
-    return (!str || /^\s*&/.test(str));
-}
-
-function add()
-    {
-        if(!isBlank(document.getElementById("task").value)) {
-
-
-            var iCon = document.createElement('div'); //create a div container
-            var dbtMenu=document.createElement('div');
-            var li = document.createElement("il");  //create a list-element
-            var closeSpan = document.createElement("span"); //create a span for badge attribute
-            var ClickListState=0;
-
-            dbtMenu.setAttribute("class","container");
-            //dbtMenu.appendChild(dropDownList);
-            li.setAttribute('id',lastId); // set an attribute for id
-            iCon.className = "glyphicon glyphicon-remove"; // image for remove button
-            closeSpan.setAttribute("class", "badge"); //create a new attribute for span
-            closeSpan.appendChild(iCon); // put it in the span set
-            iCon.addEventListener("click",function(){var element=document.getElementById(li.getAttribute('id'));
-                                                    element.parentNode.removeChild(element);}); //functionlity
-            li.innerHTML = document.getElementById('task').value;
-            li.setAttribute("class", "list-group-item hover-yellow");
-            li.addEventListener('click',function() {if(ClickListState==0){li.style.backgroundColor="red"; ClickListState++;}
-                                                    else {li.style.backgroundColor="white"; ClickListState--; }});
-            li.appendChild(closeSpan);
-            lastId++;
-            ul.appendChild(li);
-
-        }
-    }
