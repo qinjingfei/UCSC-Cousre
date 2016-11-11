@@ -69,30 +69,34 @@
 
              <!--ADD YOUR TASK button-->
              <!-- v-if is for conditional rendering, is_adding_task is defined in default_index.js-->
-             <div class="panel-heading center" id="black" v-if="!is_adding_task">
-                 <button class="btn btn-success btn-sm" v-on:click="is_adding_task=true">Add your task</button>
+             <div class="panel-heading center">
+                 <!-- Working button flashes for 1 ms, you can't see it -->
+                 <button class="btn btn-success btn-sm" v-if="!is_adding_task" v-on:click="is_adding_task=true">
+                     Working...
+                 </button>
+                 <!--input boxes-->
+                 <form action="#" v-on:submit.prevent="add_task" enctype="multipart/form-data"
+                       method="post" v-if="is_adding_task">
+                     <div id="black">
+                         <!-- v-model specifies the place to store information entered -->
+                         <!-- form_category is defined in default_index.js -->
+                         <select v-model="form_category">
+                             <option value="p">Productive</option>
+                             <option value="np">Non-productive</option>
+                             <option value="n">Necessary</option>
+                         </select>
+                         Task:
+                         <input v-model="form_task" placeholder="Enter your task" type="text"/>
+                         Time:
+                         <input v-model="form_time" size="5" type="number" name="quantity" min="1" max="999"/> minutes
+                         <input class="btn btn-success btn-sm" type="submit" value="Add"/>
+                     </div>
+                 </form>
              </div>
-             <!--input boxes-->
-             <form class="panel-heading center" action="#" v-on:submit.prevent="add_task" enctype="multipart/form-data" method="post" v-if="is_adding_task">
-                 <div id="black">
-                     <!-- v-model specifies the place to store information entered -->
-                     <!-- form_category is defined in default_index.js -->
-                     <select v-model="form_category">
-                         <option value="p">Productive</option>
-                         <option value="np">Non-productive</option>
-                         <option value="n">Necessary</option>
-                     </select>
-                     Task:
-                     <input v-model="form_task" placeholder="Enter your task" type="text"/>
-                     Time:
-                     <input v-model="form_time" size="5" type="number" name="quantity" min="1" max="999"/> minutes
-                     <input class="btn btn-success btn-sm" type="submit" value="Add"/>
-                 </div>
-             </form>
              <!--end of the input boxes-->
 
              <!--rendering tasklist-->
-             <div v-if="tasks.length!=0" class="panel-body center" id="tasklist">
+             <div class="panel-body center" id="tasklist">
                  <ul class="list-group" id="downer">
                      <!-- v-for is for list rendering -->
                      <!-- tasks is defined in default_index.js -->
