@@ -15,6 +15,16 @@ Jinying Wu
 **Main Development Toop:**
 Web2py
 
+**Main Implementation Toop (to be add):**
+controllers/api.py
+controllers/default.py
+models/tables.py
+static/js/default_index.js
+views/default/index.html
+views/default/home.html
+views/default/user.html
+static/css/myapp.css
+
 --- 
 * Rlease Plan is inside release_plan folder
 * Sprint 1 link: https://trello.com/b/RkbiEkPq/sprint-1
