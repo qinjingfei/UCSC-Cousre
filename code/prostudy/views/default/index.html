@@ -1,6 +1,6 @@
 {{extend "layout.html"}}
 {{block head}}
-<script src="{{=URL('static', 'js/vue.js')}}"></script>
+<script src="{{=URL('static', 'js/vue.js')}}" xmlns="http://www.w3.org/1999/html"></script>
 
 <!--urls needed to communicate with the server-->
 <!--They are used in default_index.js-->
@@ -9,13 +9,15 @@
     var add_task_url = "{{=URL('api', 'add_task', user_signature=True)}}";
     var del_task_url = "{{=URL('api', 'del_task', user_signature=True)}}";
     var empty_form_url = "{{=URL('default', 'empty_form')}}";
+    var dup_task_url = "{{=URL('default', 'dup_task')}}";
 </script>
 {{end}}
 
 <!-------The following codes were written by Qin Jingfei---------------------------------------------------------------------------------------------------------------->
 
+<!-- no longer useful -Weikai
 <script type="text/javascript">
-    function startTimer(n=25) {
+    function startTimer(n) {
         total = 60 * n;
         myClock = setInterval(function () {
             $("#Demo").prop("disabled","true");
@@ -32,17 +34,19 @@
         }
     }
 </script>
+!-->
 
  <!--suppress ALL -->
 <div class="container" id="vue-div">
     <div class="col-sm-6" >
         <div class="panel panel-default">
-            <div class="panel-heading center "  style="font-style: inherit" >
-                <button class="btn-default" id="Demo" onclick="startTimer(25)">
-                     Start ProStudy
-                </button>
-
+            <!-- edited by Weikai Wu -->
+            <div class="panel-heading center" id="black">
+                <span class="boxed">${time_countdown}</span>
+                <button class="btn btn-success btn-sm" v-on:click="start_count_down" v-if="!is_counting_down">start</button>
+                <button class="btn btn-danger btn-sm" v-on:click="stop_count_down" v-if="is_counting_down">stop</button>
             </div>
+            <!-- edited by Weikai Wu -->
             <div class="panel-body center">
                 <object class="icon icon-history">
                     <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24">
@@ -96,12 +100,12 @@
              <!--end of the input boxes-->
 
              <!--rendering tasklist-->
-             <div class="panel-body center" id="tasklist">
-                 <ul class="list-group" id="downer">
+             <div class="panel-body center">
+                 <ul class="list-group">
                      <!-- v-for is for list rendering -->
                      <!-- tasks is defined in default_index.js -->
                      <div v-for="task in tasks">
-                         <li class="list-group-item" id="mcompact">
+                         <li class="list-group-item mcompact">
                              <div id="left">
                                  <!--show task category in different colors-->
                                  <span class="label label-success" v-if="task.cate=='p'">${task.cate}</span>
@@ -115,7 +119,7 @@
                          </li>
                      </div>
                      <div class="loadmore" v-if="has_more">
-                         <button class="btn btn-default" id="left" v-on:click="get_more">Load more</button>
+                         <button class="btn btn-info btn-sm" id="left" v-on:click="get_more">Load more</button>
                      </div>
                  </ul>
              </div>

@@ -9,9 +9,23 @@ var app = function() {
 
     Vue.config.silent = false; // show all warnings
 
+    self.task_exists = function (task_name) {
+        var b = false;
+        for (var i = 0; i < self.vue.tasks.length; i++) {
+            if (self.vue.tasks[i].name==task_name){
+                b = true;
+                break;
+            }
+        }
+        return b;
+    };
+
     self.add_task = function () {
-        if (self.vue.form_task){
-            if (self.vue.logged_in){
+        if (self.vue.form_task){ // if duplicated task
+            if (self.task_exists(self.vue.form_task)){
+                $.post(dup_task_url,function () {})
+            }
+            else if (self.vue.logged_in){
                 // $.post() function takes 3 params: an url, an object, and a function
                 // add_task_url is defined in index.html, take a look at it
                 /* in this case, $.post() sent an object has 3 fields: task_category, task_content, and task_time to the
@@ -115,6 +129,33 @@ var app = function() {
         }
     };
 
+    function paddingZero(i) {
+        return (i < 10)?('0' + i):i;
+    }
+
+
+    self.start_count_down = function () {
+        self.vue.is_counting_down = true;
+        self.vue.myClock = setInterval(
+            function () {
+                --self.vue.time_actual;
+                var hr = paddingZero(Math.floor(self.vue.time_actual / 3600));
+                var min = paddingZero(Math.floor(self.vue.time_actual % 3600 / 60));
+                var sec = paddingZero(self.vue.time_actual % 60);
+                self.vue.time_countdown = hr+':' + min + ":" + sec;
+                if (self.vue.time_actual===0) {
+                    clearInterval(self.vue.myClock);
+                }
+            }, 1000);
+    };
+
+
+    self.stop_count_down = function () {
+        clearInterval(self.vue.myClock);
+        self.vue.is_counting_down = false;
+    };
+
+
     self.vue = new Vue({
         el: "#vue-div",
         delimiters: ['${', '}'],
@@ -129,10 +170,16 @@ var app = function() {
             form_task: null,
             form_time: 25,
             form_category: 'p',
-            //
+            // to show the time with time format
+            time_countdown: '00:25:00',
+            // actual time in seconds
+            time_actual: 25 * 60,
+            // console information
             logged_in: false,
             has_more: false,
-            is_adding_task: true
+            is_adding_task: true,
+            is_counting_down: false,
+            myClock: null
         },
         methods: {
             // functions that used in index.html, defined above
@@ -140,7 +187,13 @@ var app = function() {
             get_data: self.get_data,
             get_more: self.get_more,
             delete_task: self.delete_task,
-            extend: self.extend
+            // to avoid duplicate
+            task_exists: self.task_exists,
+            // used by get more
+            extend: self.extend,
+            // for countdown clock
+            start_count_down: self.start_count_down,
+            stop_count_down: self.stop_count_down
         },
         computed: {
 

@@ -17,15 +17,9 @@ div.absolute {
     font-style: inherit;
 }
 
-#mcompact {
+.mcompact {
     padding: 5px;
     font-size: 12px;
-}
-
-#tasklist {
-    padding-bottom: 1px;
-    padding-top: 0px;
-    text-transform: uppercase;
 }
 
 #mcnocaps {
@@ -47,6 +41,20 @@ div.absolute {
     padding-bottom: 6px;
 }
 
-#downer {
+.downer {
     padding-top: 10px;
+}
+
+#selected {
+    background-color: lightyellow;
+}
+
+#my-list-group {
+    padding: 1px;
+}
+
+.boxed {
+    border: 1px solid black;
+    background-color: white;
+    padding: 2px;
 }

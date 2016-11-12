@@ -31,6 +31,11 @@ def empty_form():
     return dict()
 
 
+def dup_task():
+    response.flash = T("Task exist!")
+    return  dict()
+
+
 def user():
     """
     exposes:
