@@ -22,7 +22,8 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
-    response.flash = T("Wellcome")
+    # response.flash = T("Welcome")
+    # Welcome is annoying
     return dict()
 
 
@@ -34,6 +35,16 @@ def empty_form():
 def dup_task():
     response.flash = T("Task exist!")
     return  dict()
+
+
+def add_conflict():
+    response.flash = T("Can't add task while counting down")
+    return dict()
+
+
+def del_conflict():
+    response.flash = T("Can't delete task while counting down")
+    return dict()
 
 
 def user():

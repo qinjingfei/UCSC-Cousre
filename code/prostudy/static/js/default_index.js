@@ -21,7 +21,10 @@ var app = function() {
     };
 
     self.add_task = function () {
-        if (self.vue.form_task){ // if duplicated task
+        if (self.vue.is_counting_down){ // you can't add a task while counting down
+            $.post(add_conflict_url,function () {});
+        }
+        else if (self.vue.form_task){ // if duplicated task
             if (self.task_exists(self.vue.form_task)){
                 $.post(dup_task_url,function () {})
             }
@@ -55,7 +58,7 @@ var app = function() {
                         id: self.vue.idx,
                         name: self.vue.form_task,
                         cate: self.vue.form_category,
-                        time: self.vue.form_time
+                        time: self.vue.form_time * 60
                 });
                 self.vue.idx = self.vue.idx +1;
             }
@@ -112,6 +115,10 @@ var app = function() {
     };
 
     self.delete_task = function(task_id) {
+        if (self.vue.is_counting_down){ // you can't delete a task while counting down
+            $.post(del_conflict_url,function () {});
+            return;
+        }
         if (self.vue.logged_in) {
             $.post(del_task_url, {task_id: task_id}, function () {self.get_data()});
         }
@@ -126,6 +133,12 @@ var app = function() {
         }
         if (idx) {
             self.vue.tasks.splice(idx - 1, 1);
+            if (self.vue.selected_task_id==task_id) {
+                self.vue.selected_task_id = null;
+                self.vue.time_actual = 25 * 60;
+                self.vue.time_countdown = '00:25:00';
+            }
+
         }
     };
 
@@ -135,6 +148,8 @@ var app = function() {
 
 
     self.start_count_down = function () {
+        if (self.vue.time_actual===0)
+            return;
         self.vue.is_counting_down = true;
         self.vue.myClock = setInterval(
             function () {
@@ -145,14 +160,64 @@ var app = function() {
                 self.vue.time_countdown = hr+':' + min + ":" + sec;
                 if (self.vue.time_actual===0) {
                     clearInterval(self.vue.myClock);
+                    self.time_up_twinkle();
                 }
             }, 1000);
     };
 
 
+    self.time_up_twinkle = function () {
+        self.vue.myTwinkle = setInterval(
+            function () {
+                self.vue.is_twinkling = !self.vue.is_twinkling;
+            },500)
+    };
+
+
     self.stop_count_down = function () {
         clearInterval(self.vue.myClock);
+        clearInterval(self.vue.myTwinkle);
         self.vue.is_counting_down = false;
+        self.vue.is_twinkling = false;
+        if (self.vue.logged_in) {
+            $.post(update_time_url,
+                {
+                    time_remained : self.vue.time_actual,
+                    task_id: self.vue.selected_task_id
+                },
+                function () {
+
+                }
+            )
+        }
+        for (var i = 0; i < self.vue.tasks.length; i++) {
+            if (self.vue.tasks[i].id === self.vue.selected_task_id) {
+                self.vue.tasks[i].time = self.vue.time_actual;
+                break;
+            }
+        }
+    };
+
+
+    self.select_task = function (task) {
+        // unselect
+        if (self.vue.selected_task_id == task.id) {
+            self.vue.selected_task_id = null;
+            self.vue.time_actual = 25 * 60;
+            self.vue.time_countdown = '00:25:00';
+            return;
+        }
+        // you can't select a task while other task is counting down
+        if (!self.vue.is_counting_down){
+            self.vue.selected_task_id = task.id;
+            // in seconds
+            self.vue.time_actual = task.time;
+            // hr:min:sec
+            self.vue.time_countdown = paddingZero(Math.floor(task.time / 3600))
+                + ':' + paddingZero(Math.floor((task.time % 3600) / 60))
+                + ':' + paddingZero(task.time % 3600 % 60);
+        }
+
     };
 
 
@@ -165,21 +230,25 @@ var app = function() {
             idx: 0,
             // local tasklist
             tasks: [],
+            // keep track of which task is selected
+            selected_task_id: null,
             // input fields
             // serve as v-model in index.html
             form_task: null,
             form_time: 25,
             form_category: 'p',
             // to show the time with time format
-            time_countdown: '00:25:00',
+            time_countdown: '00:00:05',
             // actual time in seconds
-            time_actual: 25 * 60,
+            time_actual: 5,
             // console information
             logged_in: false,
             has_more: false,
             is_adding_task: true,
             is_counting_down: false,
-            myClock: null
+            myClock: null,
+            myTwinkle: null,
+            is_twinkling: false
         },
         methods: {
             // functions that used in index.html, defined above
@@ -187,13 +256,16 @@ var app = function() {
             get_data: self.get_data,
             get_more: self.get_more,
             delete_task: self.delete_task,
+            select_task: self.select_task,
             // to avoid duplicate
             task_exists: self.task_exists,
             // used by get more
             extend: self.extend,
             // for countdown clock
             start_count_down: self.start_count_down,
-            stop_count_down: self.stop_count_down
+            stop_count_down: self.stop_count_down,
+            // time's up!
+            time_up_twinkle: self.time_up_twinkle
         },
         computed: {
 

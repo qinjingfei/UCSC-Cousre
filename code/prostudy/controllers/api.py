@@ -1,3 +1,6 @@
+# Create by Weikai Wu
+
+
 def get_user_name_from_email(email):
     """Returns a string corresponding to the user first and last names,
     given the user email."""
@@ -13,15 +16,15 @@ def add_task():
     # request.vars is the object sent from local server (default_index.js)
     name = request.vars.task_content
     cate = request.vars.task_category
-    time = request.vars.task_time
+    time = int(request.vars.task_time)*60 # time is in seconds
 
     if auth.user_id: # if logged in
         # add to database
         t_id = db.task.insert(
             task_content=name,
             category=cate,
-            time_used=0,
-            time_total=float(time)
+            time_remained=time,
+            time_total=time
         )
         # has to return a dictionary
         # so that you can call data.id, data.name, data.cate, and data.time in local server (default_index.js)
@@ -45,7 +48,7 @@ def get_data():
                         id=r.id,
                         name=r.task_content,
                         cate=r.category,
-                        time=r.time_total - r.time_used
+                        time=r.time_remained
                     )
                     tasklist.append(t)
             else:
@@ -60,9 +63,19 @@ def get_data():
         current_usr_email=current_usr_email
     ))
 
+
 @auth.requires_signature()
 def del_task():
     if auth.user_id:
         db(db.task.id == request.vars.task_id).delete()
         return 'ok'
     return 'failure'
+
+
+@auth.requires_signature()
+def update_time():
+    time = int(request.vars.time_remained)
+    db(db.task.id == request.vars.task_id).update(time_remained=time)
+    return 'ok'
+
+# Create by Weikai Wu

@@ -7,6 +7,6 @@ db.define_table('task',
                 Field('task_content', 'string'),
                 Field('category', 'string'),
                 Field('created_on', 'datetime', default=datetime.datetime.utcnow()),
-                Field('time_used', 'float'),
-                Field('time_total', 'float')
+                Field('time_remained', 'integer'),
+                Field('time_total', 'integer')
                 )

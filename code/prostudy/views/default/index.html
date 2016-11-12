@@ -10,6 +10,9 @@
     var del_task_url = "{{=URL('api', 'del_task', user_signature=True)}}";
     var empty_form_url = "{{=URL('default', 'empty_form')}}";
     var dup_task_url = "{{=URL('default', 'dup_task')}}";
+    var update_time_url = "{{=URL('api', 'update_time', user_signature=True)}}";
+    var add_conflict_url = "{{=URL('default', 'add_conflict')}}";
+    var del_conflict_url = "{{=URL('default', 'del_conflict')}}";
 </script>
 {{end}}
 
@@ -40,13 +43,13 @@
 <div class="container" id="vue-div">
     <div class="col-sm-6" >
         <div class="panel panel-default">
-            <!-- edited by Weikai Wu -->
+            <!-- ↓edited by Weikai Wu↓ -->
             <div class="panel-heading center" id="black">
-                <span class="boxed">${time_countdown}</span>
+                <span v-bind:class="['boxed',{'white': is_twinkling}]">${time_countdown}</span>
                 <button class="btn btn-success btn-sm" v-on:click="start_count_down" v-if="!is_counting_down">start</button>
                 <button class="btn btn-danger btn-sm" v-on:click="stop_count_down" v-if="is_counting_down">stop</button>
             </div>
-            <!-- edited by Weikai Wu -->
+            <!-- ↑edited by Weikai Wu↑ -->
             <div class="panel-body center">
                 <object class="icon icon-history">
                     <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24">
@@ -64,21 +67,21 @@
 <!----The codes above were written by Qin Jingfei------------------------------------------------------------------------------------------------------------------------------>
 
 
-    <!--Weikai Wu-->
-    <!--Tasklist-->
-    <!--Extensive comment for team members who are not familiar with vue-->
+    <!-- Weikai Wu -->
+    <!-- Tasklist -->
+    <!-- Extensive comment for team members who are not familiar with vue -->
     <div class="col-sm-6">
          <div class="panel panel-default">
-             <!--start of the input boxes-->
+             <!-- start of the input boxes -->
 
-             <!--ADD YOUR TASK button-->
-             <!-- v-if is for conditional rendering, is_adding_task is defined in default_index.js-->
+             <!-- "Working..." button -->
+             <!-- v-if is for conditional rendering, is_adding_task is defined in default_index.js -->
              <div class="panel-heading center">
                  <!-- Working button flashes for 1 ms, you can't see it -->
                  <button class="btn btn-success btn-sm" v-if="!is_adding_task" v-on:click="is_adding_task=true">
                      Working...
                  </button>
-                 <!--input boxes-->
+                 <!-- input boxes -->
                  <form action="#" v-on:submit.prevent="add_task" enctype="multipart/form-data"
                        method="post" v-if="is_adding_task">
                      <div id="black">
@@ -105,18 +108,16 @@
                      <!-- v-for is for list rendering -->
                      <!-- tasks is defined in default_index.js -->
                      <div v-for="task in tasks">
-                         <li class="list-group-item mcompact">
-                             <div id="left">
-                                 <!--show task category in different colors-->
-                                 <span class="label label-success" v-if="task.cate=='p'">${task.cate}</span>
-                                 <span class="label label-primary" v-if="task.cate=='np'">${task.cate}</span>
-                                 <span class="label label-warning" v-if="task.cate=='n'">${task.cate}</span>
-                             </div>
+                         <!-- task render -->
+                         <a v-on:click="select_task(task)" v-bind:class="['list-group-item','mcompact',{'selected':selected_task_id==task.id}]">
+                             <!--show task category in different colors using v-bind-->
+                             <span v-bind:class="['label',{'label-success':task.cate=='p','label-primary':task.cate=='np','label-warning':task.cate=='n'}]" id="left">
+                                 ${task.cate}
+                             </span>
                              ${task.name}
-                             <div id="right">
-                                 <i class="glyphicon glyphicon-remove" v-on:click="delete_task(task.id)"></i>
-                             </div>
-                         </li>
+                             <i class="glyphicon glyphicon-remove" id="right" v-on:click="delete_task(task.id)"></i>
+                         </a>
+                         <!-- end of task render -->
                      </div>
                      <div class="loadmore" v-if="has_more">
                          <button class="btn btn-info btn-sm" id="left" v-on:click="get_more">Load more</button>
@@ -130,3 +131,4 @@
         <!-- js source -->
 <script src="{{=URL('static', 'js/default_index.js')}}"></script>
 
+<!-- Weikai Wu -->
