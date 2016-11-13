@@ -17,22 +17,23 @@ Web2py
 
 **Main Implementation Files (to be added):**
 
-controllers/api.py
+controllers/api.py: communicate with database
 
-controllers/default.py
+controllers/default.py: includes python controllers for views/default/*.html
 
-models/tables.py
+models/tables.py: defines the database table fields
 
-static/js/default_index.js
+static/js/default_index.js: main js source for views/default/index.html
 
-views/default/index.html
+views/default/index.html: main functional page
 
-views/default/home.html
+views/default/home.html: homepage
 
-views/default/user.html
+views/default/user.html: user profile page
 
-static/css/myapp.css
+static/css/myapp.css: main css specialized for our site
 
+Other Files are unimportant or web2py-provided.
 
 --- 
 * Rlease Plan is inside release_plan folder
