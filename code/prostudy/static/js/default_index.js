@@ -167,6 +167,7 @@ var app = function() {
 
 
     self.time_up_twinkle = function () {
+        self.vue.alarm.play();
         self.vue.myTwinkle = setInterval(
             function () {
                 self.vue.is_twinkling = !self.vue.is_twinkling;
@@ -179,6 +180,7 @@ var app = function() {
         clearInterval(self.vue.myTwinkle);
         self.vue.is_counting_down = false;
         self.vue.is_twinkling = false;
+        self.vue.alarm.pause();
         if (self.vue.logged_in) {
             $.post(update_time_url,
                 {
@@ -248,7 +250,8 @@ var app = function() {
             is_counting_down: false,
             myClock: null,
             myTwinkle: null,
-            is_twinkling: false
+            is_twinkling: false,
+            alarm: new Audio(alarm_url)
         },
         methods: {
             // functions that used in index.html, defined above
