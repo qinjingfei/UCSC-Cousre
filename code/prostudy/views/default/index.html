@@ -5,15 +5,22 @@
 <!--urls needed to communicate with the server-->
 <!--They are used in default_index.js-->
 <script>
-    var get_data_url = "{{=URL('api', 'get_data')}}";
+    var get_tasks_url = "{{=URL('api', 'get_tasks')}}";
+    var get_records_url = "{{=URL('api', 'get_records')}}";
     var add_task_url = "{{=URL('api', 'add_task', user_signature=True)}}";
+    var add_record_url = "{{=URL('api', 'add_record', user_signature=True)}}";
     var del_task_url = "{{=URL('api', 'del_task', user_signature=True)}}";
+    var del_records_url = "{{=URL('api', 'del_all_records', user_signature=True)}}";
     var empty_form_url = "{{=URL('default', 'empty_form')}}";
     var dup_task_url = "{{=URL('default', 'dup_task')}}";
+    var no_record_url = "{{=URL('default', 'no_record')}}";
     var update_time_url = "{{=URL('api', 'update_time', user_signature=True)}}";
     var add_conflict_url = "{{=URL('default', 'add_conflict')}}";
     var del_conflict_url = "{{=URL('default', 'del_conflict')}}";
     var alarm_url = "{{=URL('static', 'alarm.mp3')}}";
+    var get_graph_all_tasks_url = "{{=URL('api', 'get_pie_graph_all_task')}}";
+    var get_graph_productive_url = "{{=URL('api', 'get_pie_graph_productive')}}";
+    var get_graph_versus_url = "{{=URL('api', 'get_pie_graph_versus')}}";
 </script>
 {{end}}
 
@@ -40,96 +47,140 @@
 </script>
 !-->
 
- <!--suppress ALL -->
-<div class="container" id="vue-div">
-    <div class="col-sm-6" >
-        <div class="panel panel-default">
-            <!-- ↓edited by Weikai Wu↓ -->
-            <div class="panel-heading center" id="black">
-                <span v-bind:class="['boxed',{'white': is_twinkling}]">${time_countdown}</span>
-                <button class="btn btn-success btn-sm" v-on:click="start_count_down" v-if="!is_counting_down">start</button>
-                <button class="btn btn-danger btn-sm" v-on:click="stop_count_down" v-if="is_counting_down">stop</button>
-            </div>
-            <!-- ↑edited by Weikai Wu↑ -->
-            <div class="panel-body center">
-                <object class="icon icon-history">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24">
-                        <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13
+<!-- Create a new instance of vue -->
+<div id="vue-div">
+
+    <!--suppress ALL -->
+    <div class="container">
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <!-- ↓edited by Weikai Wu↓ -->
+                <div class="panel-heading center" id="black">
+                    <span v-bind:class="['boxed',{'white': is_twinkling}]">${time_countdown}</span>
+                    <button class="btn btn-success btn-sm" v-on:click="start_count_down" v-if="!is_counting_down">start</button>
+                    <button class="btn btn-danger btn-sm" v-on:click="stop_count_down" v-if="is_counting_down">stop</button>
+                </div>
+                <!-- ↑edited by Weikai Wu↑ -->
+                <div class="panel-body center">
+                    <object class="icon icon-history" v-if="records.length==0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24">
+                            <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13
                                  7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97
                                  0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path>
-                    </svg>
-                </object>
-                <br>
-                No Record
+                        </svg>
+                        <br>
+                        No Record
+                    </object>
+                    <!-- ↓added by Weikai Wu↓ -->
+                    <ul class="list-group" v-else>
+                        <div v-for="r in records">
+                            <li class="list-group-item mcompact">${r.message}</li>
+                        </div>
+                        <div class="loadmore">
+                            <button class="btn btn-info btn-sm" id="left" v-on:click="get_more_records" v-if="has_more_records">Load previous</button>
+                            <!--
+                            <button class="btn btn-warning btn-sm" id="right" v-on:click="delete_all_records">Clear records</button>
+                            -->
+                        </div>
+                    </ul>
+                    <!-- ↑added by Weikai Wu↑ -->
+                </div>
+
             </div>
-
         </div>
-    </div>
-<!----The codes above were written by Qin Jingfei------------------------------------------------------------------------------------------------------------------------------>
+        <!----The codes above were written by Qin Jingfei------------------------------------------------------------------------------------------------------------------------------>
 
 
-    <!-- Weikai Wu -->
-    <!-- Tasklist -->
-    <!-- Extensive comment for team members who are not familiar with vue -->
-    <div class="col-sm-6">
-         <div class="panel panel-default">
-             <!-- start of the input boxes -->
+        <!-- Weikai Wu -->
+        <!-- Tasklist -->
+        <!-- Extensive comment for team members who are not familiar with vue -->
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <!-- start of the input boxes -->
 
-             <!-- "Working..." button -->
-             <!-- v-if is for conditional rendering, is_adding_task is defined in default_index.js -->
-             <div class="panel-heading center">
-                 <!-- Working button flashes for 1 ms, you can't see it -->
-                 <button class="btn btn-success btn-sm" v-if="!is_adding_task" v-on:click="is_adding_task=true">
-                     Working...
-                 </button>
-                 <!-- input boxes -->
-                 <form action="#" v-on:submit.prevent="add_task" enctype="multipart/form-data"
-                       method="post" v-if="is_adding_task">
-                     <div id="black">
-                         <!-- v-model specifies the place to store information entered -->
-                         <!-- form_category is defined in default_index.js -->
-                         <select v-model="form_category">
-                             <option value="p">Productive</option>
-                             <option value="np">Non-productive</option>
-                             <option value="n">Necessary</option>
-                         </select>
-                         Task:
-                         <input v-model="form_task" placeholder="Enter your task" type="text"/>
-                         Time:
-                         <input v-model="form_time" size="5" type="number" name="quantity" min="1" max="999"/> minutes
-                         <input class="btn btn-success btn-sm" type="submit" value="Add"/>
-                     </div>
-                 </form>
-             </div>
-             <!--end of the input boxes-->
+                <!-- "Working..." button -->
+                <!-- v-if is for conditional rendering, is_adding_task is defined in default_index.js -->
+                <div class="panel-heading center">
+                    <!-- Working button flashes for 1 ms, you can't see it -->
+                    <button class="btn btn-success btn-sm" v-if="!is_adding_task" v-on:click="is_adding_task=true">
+                        Working...
+                    </button>
+                    <!-- input boxes -->
+                    <form action="#" v-on:submit.prevent="add_task" enctype="multipart/form-data"
+                          method="post" v-if="is_adding_task">
+                        <div id="black">
+                            <!-- v-model specifies the place to store information entered -->
+                            <!-- form_category is defined in default_index.js -->
+                            <select v-model="form_category">
+                                <option value="p">Productive</option>
+                                <option value="np">Non-productive</option>
+                                <option value="n">Necessary</option>
+                            </select>
+                            Task:
+                            <input v-model="form_task" placeholder="Enter your task" type="text"/>
+                            Time:
+                            <input v-model="form_time" size="5" type="number" name="quantity" min="1" max="999"/> minutes
+                            <input class="btn btn-success btn-sm" type="submit" value="Add"/>
+                        </div>
+                    </form>
+                </div>
+                <!--end of the input boxes-->
 
-             <!--rendering tasklist-->
-             <div class="panel-body center">
-                 <ul class="list-group">
-                     <!-- v-for is for list rendering -->
-                     <!-- tasks is defined in default_index.js -->
-                     <div v-for="task in tasks">
-                         <!-- task render -->
-                         <a v-on:click="select_task(task)" v-bind:class="['list-group-item','mcompact',{'selected':selected_task_id==task.id}]">
-                             <!--show task category in different colors using v-bind-->
-                             <span v-bind:class="['label',{'label-success':task.cate=='p','label-primary':task.cate=='np','label-warning':task.cate=='n'}]" id="left">
+                <!--rendering tasklist-->
+                <div class="panel-body center">
+                    <object class="icon icon-history" v-if="tasks.length==0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24">
+                            <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13
+                                 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97
+                                 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path>
+                        </svg>
+                        <br>
+                        No tasks
+                    </object>
+                    <ul class="list-group" v-else>
+                        <!-- v-for is for list rendering -->
+                        <!-- tasks is defined in default_index.js -->
+                        <div v-for="task in tasks">
+                            <!-- task render -->
+                            <a v-on:click="select_task(task)" v-bind:class="['list-group-item','mcompact',{'selected':selected_task_id==task.id}]">
+                                <!--show task category in different colors using v-bind-->
+                                <span v-bind:class="['label',{'label-success':task.cate=='p','label-primary':task.cate=='np','label-warning':task.cate=='n'}]" id="left">
                                  ${task.cate}
                              </span>
-                             ${task.name}
-                             <i class="glyphicon glyphicon-remove" id="right" v-on:click="delete_task(task.id)"></i>
-                         </a>
-                         <!-- end of task render -->
-                     </div>
-                     <div class="loadmore" v-if="has_more">
-                         <button class="btn btn-info btn-sm" id="left" v-on:click="get_more">Load more</button>
-                     </div>
-                 </ul>
-             </div>
-         </div>
+                                ${task.name}
+                                <i class="glyphicon glyphicon-remove" id="right" v-on:click="delete_task(task.id)"></i>
+                            </a>
+                            <!-- end of task render -->
+                        </div>
+                        <div class="loadmore" v-if="has_more_tasks">
+                            <button class="btn btn-info btn-sm" id="left" v-on:click="get_more_tasks">Load more</button>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
-        <!-- js source -->
+    <div class="container">
+        <div class="col-sm-12">
+            <button class="btn btn-success btn-sm" v-bind:class="{'disabled': !logged_in}" v-if="!logged_in">Graph your usage</button>
+            <div v-if="!logged_in">Please login to graph your usage.<br>Don't have an account? Signup today!</div>
+            <button class="btn btn-success btn-sm" v-on:click="get_graph" v-if="no_graph_and_logged_in">Graph your usage</button>
+            <button class="btn btn-warning btn-sm" v-on:click="has_graph=false" v-if="has_graph">Hide graph</button>
+            <div style="width: 1250px; height: 90px;" v-if="has_graph">
+                <img src="{{=URL('api', 'get_pie_graph_all_task')}}">
+                <img src="{{=URL('api', 'get_pie_graph_productive')}}">
+                <img src="{{=URL('api', 'get_pie_graph_versus')}}">
+            </div>
+        </div>
+    </div>
+
+    <!-- vue ends here -->
+</div>
+<!-- js source -->
 <script src="{{=URL('static', 'js/default_index.js')}}"></script>
+
+{{block footer}}
+{{end}}
 
 <!-- Weikai Wu -->
