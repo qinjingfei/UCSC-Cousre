@@ -32,9 +32,15 @@ def add_task():
     return 'failed'
 
 
-def get_data():
+@auth.requires_signature()
+def add_record():
+    db.record.insert(record_content=request.vars.message)
+    return 'ok'
+
+
+def get_tasks():
     logged_in = True
-    has_more = False
+    has_more_tasks = False
     tasklist = []
     current_usr_email = auth.user.email if auth.user_id else None
     if auth.user_id:
@@ -52,14 +58,41 @@ def get_data():
                     )
                     tasklist.append(t)
             else:
-                has_more = True
+                has_more_tasks = True
                 break
     else:
         logged_in = False
     return response.json(dict(
         logged_in=logged_in,
-        has_more=has_more,
+        has_more_tasks=has_more_tasks,
         tasklist=tasklist,
+        current_usr_email=current_usr_email
+    ))
+
+
+def get_records():
+    logged_in = True
+    has_more_records = False
+    recordlist = []
+    current_usr_email = auth.user.email if auth.user_id else None
+    if auth.user_id:
+        start_idx = int(request.vars.start_idx) if request.vars.start_idx is not None else 0
+        end_idx = int(request.vars.end_idx) if request.vars.end_idx is not None else 0
+        rows = db(db.record.user_email == auth.user.email).select(db.record.ALL, orderby=~db.record.created_on, limitby=(start_idx, end_idx + 1))
+        for i, r in enumerate(rows):
+            if i < end_idx - start_idx:
+                if auth.user.email == r.user_email:
+                    t = dict(message=r.record_content)
+                    recordlist.append(t)
+            else:
+                has_more_records = True
+                break
+    else:
+        logged_in = False
+    return response.json(dict(
+        logged_in=logged_in,
+        has_more_records=has_more_records,
+        recordlist=recordlist,
         current_usr_email=current_usr_email
     ))
 
@@ -73,9 +106,92 @@ def del_task():
 
 
 @auth.requires_signature()
+def del_all_records():
+    db(db.record.user_email == auth.user.email).delete()
+    return 'ok'
+
+
+@auth.requires_signature()
 def update_time():
     time = int(request.vars.time_remained)
     db(db.task.id == request.vars.task_id).update(time_remained=time)
     return 'ok'
+
+
+def get_pie_graph_all_task():
+    # do not select tasks that have not yet started
+    rows = db(db.task.user_email == auth.user.email
+              and db.task.time_total != db.task.time_remained).select(db.task.ALL, orderby=~db.task.created_on)
+    time_used_list = []
+    explode = []
+    labels = []
+    for r in rows:
+        time_used_list.append(float(r.time_total - r.time_remained))
+        labels.append(r.task_content)
+        if r.category == 'p':
+            explode.append(0.1)
+        else:
+            explode.append(0.0)
+    total_time_used = sum(time_used_list)
+    percentiles = [t / total_time_used for t in time_used_list]
+    response.headers['Content-Type'] = 'image/png'
+    return plot_pie('All Tasks', percentiles, explode, labels)
+
+
+def get_pie_graph_productive():
+    # select all the productive task of the current user
+    # do not select tasks that have not yet started
+    rows = db(db.task.user_email == auth.user.email
+              and db.task.time_total != db.task.time_remained
+              and db.task.category == 'p').select(db.task.ALL, orderby=~db.task.created_on)
+    time_used_list = []
+    labels = []
+    for r in rows:
+        time_used_list.append(float(r.time_total - r.time_remained))
+        labels.append(r.task_content)
+    total_time_used = sum(time_used_list)
+    percentiles = [t / total_time_used for t in time_used_list]
+    # largest sector spread out a bit
+    explode = [0.0] * len(labels)
+    if len(time_used_list) != 0:
+        explode[time_used_list.index(max(time_used_list))] = 0.1
+    response.headers['Content-Type'] = 'image/png'
+    return plot_pie('Productive Tasks Only', percentiles, explode, labels)
+
+
+def get_pie_graph_versus():
+    rows = db(db.task.user_email == auth.user.email).select(db.task.ALL, orderby=~db.task.created_on)
+    p_total_times, np_total_times, n_total_times = 0.0, 0.0, 0.0
+    for r in rows:
+        time_used = float(r.time_total - r.time_remained)
+        if r.category is 'p':
+            p_total_times += time_used
+        elif r.category == 'np':
+            np_total_times += time_used
+        elif r.category is 'n':
+            n_total_times += time_used
+    percentiles = []
+    labels = []
+    explode = []
+    colors = []
+    total_times = p_total_times + np_total_times + n_total_times
+    if p_total_times != 0.0:
+        percentiles.append(p_total_times / total_times)
+        labels.append('Productive')
+        explode.append(0.1)
+        colors.append('lightgreen')
+    if np_total_times != 0.0:
+        percentiles.append(np_total_times / total_times)
+        labels.append('Non-Productive')
+        explode.append(0.0)
+        colors.append('skyblue')
+    if n_total_times != 0.0:
+        percentiles.append(n_total_times / total_times)
+        labels.append('Necessary')
+        explode.append(0.0)
+        colors.append('firebrick')
+    response.headers['Content-Type'] = 'image/png'
+    return plot_pie('Category Sectors', percentiles, explode, labels, colors)
+
 
 # Create by Weikai Wu
