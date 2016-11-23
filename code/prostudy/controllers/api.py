@@ -119,6 +119,8 @@ def update_time():
 
 
 def get_pie_graph_all_task():
+    if not auth.user_id:
+        return plot_pie('', [], [], [])
     # do not select tasks that have not yet started
     rows = db((db.task.user_email == auth.user.email)
               & (db.task.time_total != db.task.time_remained)).select(db.task.ALL, orderby=~db.task.created_on)
@@ -139,6 +141,8 @@ def get_pie_graph_all_task():
 
 
 def get_pie_graph_productive():
+    if not auth.user_id:
+        return plot_pie('', [], [], [])
     # select all the productive task of the current user
     # do not select tasks that have not yet started
     rows = db((db.task.user_email == auth.user.email)
@@ -160,6 +164,8 @@ def get_pie_graph_productive():
 
 
 def get_pie_graph_versus():
+    if not auth.user_id:
+        return plot_pie('', [], [], [])
     rows = db(db.task.user_email == auth.user.email).select(db.task.ALL, orderby=~db.task.created_on)
     p_total_times, np_total_times, n_total_times = 0.0, 0.0, 0.0
     for r in rows:
@@ -222,6 +228,7 @@ def check_graph_versus():
     if len(rows) is 0:
         has_graph_versus = False
     return response.json(dict(has_graph_versus=has_graph_versus))
+
 
 
 # Create by Weikai Wu
