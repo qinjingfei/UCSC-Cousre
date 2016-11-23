@@ -232,8 +232,20 @@ var app = function() {
         if (t < 60) return t + ' seconds';
         var hr = Math.floor(t / 3600);
         var min = Math.floor(t % 3600 / 60);
-
-        return ((hr == 0)?'':(hr + ((hr>1)?' hours ':' hour ')) + min + ((min > 1)?' minutes':' minute'));
+        var result = "";
+        if (hr > 0) {
+            result += hr;
+            if (hr > 1)
+                result += ' hours ';
+            else result += ' hour ';
+        }
+        if (min > 0) {
+            result += min;
+            if (min > 1)
+                result += ' minutes ';
+            else result += ' minute ';
+        }
+        return result
     }
 
 
