@@ -1,6 +1,6 @@
 # This Folder is for CMPS115 Project 
 ---
-**Product:** https://wwu39.pythonanywhere.com/prostudy/default/index
+**Product:** https://wwu39.pythonanywhere.com/prostudy/
 
 **Project name:** Pro Study
 
@@ -29,7 +29,7 @@ static/js/default_index.js: main js source for views/default/index.html
 
 views/default/index.html: main functional page
 
-views/default/home.html: homepage
+views/default/BG.html: homepage
 
 views/default/user.html: user profile page
 
