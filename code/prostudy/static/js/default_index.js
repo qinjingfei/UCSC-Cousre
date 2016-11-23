@@ -320,7 +320,7 @@ var app = function() {
         $.post(check_graph_productive_url, function (data) {
             self.vue.has_graph_productive = data.has_graph_productive
         });
-        $.post(get_graph_productive_url, function (data) {});
+        $.post(get_graph_productive_url, function () {});
 
         $.post(check_graph_versus_url, function (data) {
             self.vue.has_graph_versus = data.has_graph_versus
@@ -328,6 +328,13 @@ var app = function() {
         $.post(get_graph_versus_url, function () {});
         self.vue.show_graph = true;
     };
+
+
+    self.initialize_graph = function () {
+        $.post(get_graph_all_tasks_url, function () {});
+        $.post(get_graph_productive_url, function () {});
+        $.post(get_graph_versus_url, function () {});
+    }
 
 
     self.vue = new Vue({
@@ -386,7 +393,8 @@ var app = function() {
             time_up_twinkle: self.time_up_twinkle,
 
             // graphing
-            get_graph: self.get_graph
+            get_graph: self.get_graph,
+            initialize_graph: self.initialize_graph
         },
         computed: {
             // we can't do &&, ||, or other logic operator in v-if
@@ -402,6 +410,7 @@ var app = function() {
     });
     self.get_tasks(); // so that user can see his/her tasks when open/refresh the page
     self.get_records(); // so that user can see his/her records when open/refresh the page
+    self.initialize_graph();
     $("#vue-div").show();
     return self;
 };
