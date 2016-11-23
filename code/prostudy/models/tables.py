@@ -10,3 +10,11 @@ db.define_table('task',
                 Field('time_remained', 'integer'),
                 Field('time_total', 'integer')
                 )
+
+db.define_table('record',
+                Field('user_email', default=auth.user.email if auth.user_id else None),
+                Field('record_content', 'string'),
+                Field('created_on', 'datetime', default=datetime.datetime.utcnow())
+                )
+
+# Create by Weikai Wu

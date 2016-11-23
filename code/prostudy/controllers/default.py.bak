@@ -36,27 +36,27 @@ def empty_form():
 
 def dup_task():
     response.flash = T("Task exist!")
-    return  'duplicate task'
+    return  dict()
 
 
 def no_record():
     response.flash = T("No Record!")
-    return 'no record'
+    return dict()
 
 
 def add_conflict():
     response.flash = T("Can't add task while counting down")
-    return 'councting down'
+    return dict()
 
 
 def del_conflict():
     response.flash = T("Can't delete task while counting down")
-    return 'councting down'
+    return dict()
 
 
 def no_task_to_start():
     response.flash = T("Please select a task to start")
-    return 'no task to start'
+    return dict()
 
 
 # the above is written by Weikai Wu

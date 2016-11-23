@@ -1,0 +1,131 @@
+{{extend "layout.html"}}
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+.styled {
+  width:400px;
+
+  }
+
+
+.top {
+    font-size: 20px;
+    padding: 100px;
+    background-color: #FFFFFF;
+    color: black;
+    margin-top: -110px;
+    margin-right: -30px;
+    margin-bottom: 0px;
+    margin-left: -30px;
+}
+.title {
+    font-size: 20px;
+    padding: 100px;
+    background-color: #6699CC;
+    color: white;
+    margin-top: 0px;
+    margin-right: -30px;
+    margin-bottom: 0px;
+    margin-left: -30px;
+}
+
+.todolist {
+    text-align: left;
+    font-size: 20px;
+    padding: 100px;
+    background-color: #FFFFFF;
+    color: black;
+    margin-top: 0px;
+    margin-right: -30px;
+    margin-bottom: 80px;
+    margin-left: -30px;
+}
+
+.timer {
+    text-align: left;
+    font-size: 20px;
+    padding: 100px;
+    background-color: #CCCCCC;
+    color: black;
+    margin-top: 0px;
+    margin-right: -30px;
+    margin-bottom: 0px;
+    margin-left: -30px;
+}
+
+.work {
+    text-align: left;
+    font-size: 20px;
+    padding: 100px;
+    background-color: #FFFFFF;
+    color: black;
+    margin-top: 0px;
+    margin-right: -30px;
+    margin-bottom: 0px;
+    margin-left: -30px;
+}
+
+
+
+</style>
+
+</head>
+<div class="top">
+<head>
+  <title>Home Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+
+<div class="container">
+    <center><img src=https://wwu39.pythonanywhere.com/prostudy/static/_2.14.6/images/logo.png style="width:350px;height:180px;"></center>
+
+    <h2 class="text-center" style="color:#666666;">Make your work in track of time and manage your work.</h2> <br>
+
+</div>
+
+
+</div>
+
+
+</body>
+<div class="title">
+  <h1><center></font-size>Full Workflow in Pro-study</center></h1>
+  <p><center>Pro-study can help you manage your work by scheduling tasks and displaying your performance with pie charts.</center></p>
+</div>
+
+<div class="todolist">
+    <h1>Pro-study todo list</h1><img src=https://wwu39.pythonanywhere.com/prostudy/static/_2.14.6/images/todolist.png style="float:right;width:600px;height:230px;">
+    <div class="styled">
+        <p style="color:#666666;">The to-do list is designed to keep track of a set of tasks that you normally would do in a period of time.</p>
+    </div>
+
+</div>
+
+<div class="timer">
+    <img src=https://wwu39.pythonanywhere.com/prostudy/static/_2.14.6/images/timer.png style="float:right;width:600px;height:230px;">
+    <h1>The timer can Keep things on track</h1>
+    <div class="styled">
+    <p style="color:#666666;">
+        With the timer, you can keep track of how much time you spend on each task.
+    </p>
+
+
+    </div>
+
+</div>
+
+<div class="work">
+    <center><h1>
+        Work statistics
+    </h1>
+    <img src=https://wwu39.pythonanywhere.com/prostudy/static/_2.14.6/images/graph2.png >
+        </center>
+</div>
+
+
+
+</html>

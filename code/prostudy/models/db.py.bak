@@ -101,7 +101,7 @@ mail = Mail()
 mail = auth.settings.mailer
 mail.settings.server = 'smtp.gmail.com:587'
 mail.settings.sender = 'prostudy1994@gmail.com'
-mail.settings.login = 'prostudy1994@gmail.com:daniel1994'
+mail.settings.login = 'prostudy1994@gmail.com:dell1994'
 
 # -------------------------------------------------------------------------
 # configure auth policy

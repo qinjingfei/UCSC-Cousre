@@ -4,8 +4,6 @@
 
 <!--urls needed to communicate with the server-->
 <!--They are used in default_index.js-->
-<!-- Since we need the python URL function-->
-<!--  They can't be in the js file -->
 <script>
     var get_tasks_url = "{{=URL('api', 'get_tasks')}}";
     var get_records_url = "{{=URL('api', 'get_records')}}";
@@ -20,13 +18,9 @@
     var add_conflict_url = "{{=URL('default', 'add_conflict')}}";
     var del_conflict_url = "{{=URL('default', 'del_conflict')}}";
     var alarm_url = "{{=URL('static', 'alarm.mp3')}}";
-    var check_graph_all_tasks_url = "{{=URL('api', 'check_graph_all_task')}}";
-    var check_graph_productive_url = "{{=URL('api', 'check_graph_productive')}}";
-    var check_graph_versus_url = "{{=URL('api', 'check_graph_versus')}}";
     var get_graph_all_tasks_url = "{{=URL('api', 'get_pie_graph_all_task')}}";
     var get_graph_productive_url = "{{=URL('api', 'get_pie_graph_productive')}}";
     var get_graph_versus_url = "{{=URL('api', 'get_pie_graph_versus')}}";
-    var no_task_to_start_url = "{{=URL('default', 'no_task_to_start')}}";
 </script>
 {{end}}
 
@@ -152,7 +146,7 @@
                                 <!--show task category in different colors using v-bind-->
                                 <span v-bind:class="['label',{'label-success':task.cate=='p','label-primary':task.cate=='np','label-warning':task.cate=='n'}]" id="left">
                                  ${task.cate}
-                                </span>
+                             </span>
                                 ${task.name}
                                 <i class="glyphicon glyphicon-remove" id="right" v-on:click="delete_task(task.id)"></i>
                             </a>
@@ -169,20 +163,15 @@
 
     <div class="container">
         <div class="col-sm-12">
-            <!-- button for not logged in  -->
             <button class="btn btn-success btn-sm" v-bind:class="{'disabled': !logged_in}" v-if="!logged_in">Graph your usage</button>
             <div v-if="!logged_in">Please login to graph your usage.<br>Don't have an account? Signup today!</div>
-
-            <!-- button for logged in  -->
-            <button class="btn btn-success btn-sm" v-on:click="get_graph" v-if="not_show_graph_and_logged_in">Graph your usage</button>
-            <button class="btn btn-warning btn-sm" v-on:click="show_graph=false" v-if="show_graph">Hide graph</button>
-            <!-- graph rendering -->
-            <div style="width: 1250px; height: 90px;" v-if="show_graph">
-                <img src="{{=URL('api', 'get_pie_graph_all_task')}}" v-if="has_graph_all_tasks">
-                <img src="{{=URL('api', 'get_pie_graph_productive')}}" v-if="has_graph_productive">
-                <img src="{{=URL('api', 'get_pie_graph_versus')}}" v-if="has_graph_versus">
+            <button class="btn btn-success btn-sm" v-on:click="get_graph" v-if="no_graph_and_logged_in">Graph your usage</button>
+            <button class="btn btn-warning btn-sm" v-on:click="has_graph=false" v-if="has_graph">Hide graph</button>
+            <div style="width: 1250px; height: 90px;" v-if="has_graph">
+                <img src="{{=URL('api', 'get_pie_graph_all_task')}}">
+                <img src="{{=URL('api', 'get_pie_graph_productive')}}">
+                <img src="{{=URL('api', 'get_pie_graph_versus')}}">
             </div>
-            <div v-if="no_graph_can_be_showed">No graph available</div>
         </div>
     </div>
 

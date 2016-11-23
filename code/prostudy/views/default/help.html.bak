@@ -1,0 +1,86 @@
+<!----The following codes were written by Qin Jingfei------------------------------------------------------------------------------------------------------------------------------>
+
+{{extend "layout.html"}}
+{{block head}}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- load MUI -->
+    <link href="//cdn.muicss.com/mui-0.9.4/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="//cdn.muicss.com/mui-0.9.4/js/mui.min.js"></script>
+{{end}}
+
+<!----change to default header
+<div class="mui-appbar navbar-fixed-top" style="background-color: #3e3f3a;">
+    <h1 class="mui--text-left">Help Center</h1>
+</div>
+--->
+
+<h1 class="center">How can we help you?</h1>
+
+<div class="mui-container-fuild">
+        <div class="mui-row" >
+           <div class="mui-col-sm-10 mui-col-sm-offset-1">
+               <div class="space-top"></div>
+               <h3 class="mui--text-dark-secondary">Frequently Asked Questions</h3>
+               <div class="mui-panel">
+                         <div style="background: #f8f8f8;">
+                            <ul style="list-style-type:none; display:inline-block;"  >
+                                <li>
+                                    <b>What is Pro Study? </b>
+                                    <p>Pro Study is a website that helps students focus on their study.</p>
+                                </li>
+                                <li>
+                                    <b>How can I use Pro Study? </b>
+                                    <br>
+                                    <ul style="list-style-type: circle">
+                                        <li>Create an Account</li>
+                                        <li>Login</li>
+                                        <li>Input a list of tasks that you normally do</li>
+                                        <li>Categorize each task according to its usage</li>
+                                        <li>Set the ideal time that you would spend on each task</li>
+                                        <li>Once you have your list done, select a task and start the timer</li>
+                                        <li>Once you are done with the task or feel you want to switch, click the stop button</li>
+                                        <li>Repeat the same process until you are done with your work</li>
+                                        <br>
+                                    </ul>
+                                </li>
+                                 <li>
+                                    <b>Do I have to register? </b>
+                                    <br>
+                                    <p>Yes.</p>
+                                 </li>
+                                 <li>
+                                    <b>How can I contact u guys? </b>
+                                    <br>
+                                    <span>Our email is </span><b> jqin4@ucsc.edu</b><span>.</span>
+                                     <br>
+                                </li>
+                            </ul>
+                   </div>
+                   <a href="BG.html"> << Go Back to Home Page</a>
+               </div>
+            </div>
+        </div>
+</div>
+
+<!----conflict with default footer
+<div id="footer" class="navbar-fixed-bottom" style="height: 100px;">
+    <div class="mui-container-fuild">
+        <nav class="mui-row" role="navigation">
+           <div class="mui-col-sm-10 mui-col-sm-offset-1">
+            <ul class="mui-list--inline mui--text-body2 mui--text-light">
+                <li>The website was created by</li>
+                <li>Daniel F Martinez</li>
+                <li>Jingfei Qin</li>
+                <li>Weikai Wu</li>
+                <li>Jinying Wu</li>
+            </ul>
+           </div>
+
+        </nav>
+    </div>
+
+</div>
+---->
+<!----The codes above were written by Qin Jingfei------------------------------------------------------------------------------------------------------------------------------>

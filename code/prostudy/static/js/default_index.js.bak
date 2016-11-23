@@ -390,6 +390,7 @@ var app = function() {
     });
     self.get_tasks(); // so that user can see his/her tasks when open/refresh the page
     self.get_records(); // so that user can see his/her records when open/refresh the page
+    self.get_graph();
     $("#vue-div").show();
     return self;
 };

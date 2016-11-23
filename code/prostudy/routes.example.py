@@ -23,6 +23,8 @@
 from fileutils import abspath
 from languages import read_possible_languages
 
+default_function = 'BG'
+
 possible_languages = read_possible_languages(abspath('applications', app))
 # ----------------------------------------------------------------------------------------------------------------------
 # NOTE! app - is an application based router's parameter with name of an application. E.g.'welcome'

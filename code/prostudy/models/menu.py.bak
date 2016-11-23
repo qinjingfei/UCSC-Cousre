@@ -37,7 +37,7 @@ response.menu += [
 ]
 
 response.menu += [
-    (T('Help'), False, URL('default', 'help'), [])
+    (T('Help'), False, URL('default', 'page'), [])
 ]
 
 
