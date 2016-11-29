@@ -41,6 +41,8 @@ views/default/view_post.html: -Daniel
 
 views/default/BG.html: homepage -Jinying
 
+views/default/help.html: help page -Jingfei
+
 static/css/myapp.css: main css specialized for our site -Everyone
 
 Other Files are unimportant or web2py-provided.
