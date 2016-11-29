@@ -1,0 +1,33 @@
+# -*- coding: utf-8 -*-
+# try something like
+
+POST_PER_PAGE=10
+
+def list_posts():
+    page=request.args(1, cast=int, default=0)
+    start=page*POST_PER_PAGE
+    stop=start+POST_PER_PAGE
+    rows=db(db.post).select(orderby=~db.post.created_on, limitby=(start,stop))
+    return dict(message="hello from forum.py")
+
+@auth.requires_login()
+def edit_post():
+    id=request.args(0,cast=int)
+    form=SQLFORM(db.post,id).process(next=URL('view_post/[id]'))
+    return locals()
+
+@auth.requires_login()
+def create_post():
+    db.post.votes.readable=False
+    db.post.votes.writable=False
+    form=SQLFORM(db.post).process(next=URL('view_post/[id]'))
+    return locals()
+
+def vote_callback():
+    direction=request.args(1,cast=int)
+    return locals()
+
+def view_post():
+    id=request.args(0,cast=int)
+    post=db.post(id) or redirect(URL('index'))
+    comment=db(db.comm.post==post.id).select(orderby=~db.comm.created_on)

@@ -1,0 +1,4 @@
+{{extend 'layout.html'}}
+<h1>{{=form}}</h1>
+<a href={{=URL('view_post',args=((post.id),page))}} class="btn btn-success" role="button">Go Back</a>
+<br>  </br>

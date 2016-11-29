@@ -96,17 +96,19 @@ auth.define_tables(username=False, signature=False)
 # configure email
 # -------------------------------------------------------------------------
 
+#Email settings
 from gluon.tools import Mail
 mail = Mail()
 mail = auth.settings.mailer
 mail.settings.server = 'smtp.gmail.com:587'
 mail.settings.sender = 'prostudy1994@gmail.com'
-mail.settings.login = 'prostudy1994@gmail.com:dell1994'
+mail.settings.login = 'prostudy1994@gmail.com:daniel1994'
+#Created by Daniel F Martinez
 
 # -------------------------------------------------------------------------
 # configure auth policy
 # -------------------------------------------------------------------------
-auth.settings.registration_requires_verification = True
+auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
 

@@ -182,7 +182,7 @@ def get_pie_graph_versus():
         colors.append('lightgreen')
     if np_total_times != 0.0:
         percentiles.append(np_total_times / total_times)
-        labels.append('Non-Productive')
+        labels.append('Non-Prod')
         explode.append(0.0)
         colors.append('skyblue')
     if n_total_times != 0.0:
@@ -192,6 +192,37 @@ def get_pie_graph_versus():
         colors.append('firebrick')
     response.headers['Content-Type'] = 'image/png'
     return plot_pie('Category Sectors', percentiles, explode, labels, colors)
+
+# check if it's none graph
+# we can't tell the graph returned by get_graph functions is what
+
+
+def check_graph_all_task():
+    rows = db((db.task.user_email == auth.user.email)
+              & (db.task.time_total != db.task.time_remained)).select(db.task.ALL, orderby=~db.task.created_on)
+    has_graph_all_tasks = True
+    if len(rows) is 0:
+        has_graph_all_tasks = False
+    return response.json(dict(has_graph_all_tasks=has_graph_all_tasks))
+
+
+def check_graph_productive():
+    rows = db((db.task.user_email == auth.user.email)
+              & (db.task.time_total != db.task.time_remained)
+              & (db.task.category == 'p')).select(db.task.ALL, orderby=~db.task.created_on)
+    has_graph_productive = True
+    if len(rows) is 0:
+        has_graph_productive = False
+    return response.json(dict(has_graph_productive=has_graph_productive))
+
+
+def check_graph_versus():
+    rows = db(db.task.user_email == auth.user.email).select(db.task.ALL, orderby=~db.task.created_on)
+    has_graph_versus = True
+    if len(rows) is 0:
+        has_graph_versus = False
+    return response.json(dict(has_graph_versus=has_graph_versus))
+
 
 
 # Create by Weikai Wu

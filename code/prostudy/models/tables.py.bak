@@ -38,4 +38,7 @@ db.define_table('comm',
                 sanitize=True, permitted_tags=['br/'])),
                 auth.signature
                 )
+
+db.comm.truncate()
+db.post.truncate()
 #Created by Daniel F Martinez

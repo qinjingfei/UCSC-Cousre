@@ -15,25 +15,33 @@ Weikai Wu(SM)
 Jinying Wu 
 
 **Main Development Tool:**
-Web2py
+Web2py, Vue.js Framework
 
 **Main Implementation Files (to be added):**
 
-controllers/api.py: communicate with database
+controllers/api.py: communicate with database -Weikai
 
-controllers/default.py: includes python controllers for views/default/*.html
+controllers/default.py: includes python controllers for views/default/*.html -Weikai -Daniel
 
-models/tables.py: defines the database table fields
+models/tables.py: defines the database table fields -Weikai -Danial
 
-static/js/default_index.js: main js source for views/default/index.html
+models/makegraph.py: secter graph drawing module -Weikai
 
-views/default/index.html: main functional page
+static/js/default_index.js: main js source for views/default/index.html (app page) -Weikai
 
-views/default/BG.html: homepage
+views/default/index.html: main functional page (app page) -Weikai -Jingfei
 
-views/default/user.html: user profile page
+views/default/create_post.html: -Daniel
 
-static/css/myapp.css: main css specialized for our site
+views/default/edit_post.html: -Daniel
+
+views/default/list_post.html: -Daniel
+
+views/default/view_post.html: -Daniel
+
+views/default/BG.html: homepage -Jinying
+
+static/css/myapp.css: main css specialized for our site -Everyone
 
 Other Files are unimportant or web2py-provided.
 

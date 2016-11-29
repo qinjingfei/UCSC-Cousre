@@ -96,19 +96,21 @@ auth.define_tables(username=False, signature=False)
 # configure email
 # -------------------------------------------------------------------------
 
+#Email settings
 from gluon.tools import Mail
-mail = Mail()
+mail = Mail() # Implement Mail object
 mail = auth.settings.mailer
-mail.settings.server = 'smtp.gmail.com:587'
-mail.settings.sender = 'prostudy1994@gmail.com'
-mail.settings.login = 'prostudy1994@gmail.com:daniel1994'
+mail.settings.server = 'smtp.gmail.com:587' # Server used to send emails
+mail.settings.sender = 'prostudy1994@gmail.com' # Email used to send emails
+mail.settings.login = 'prostudy1994@gmail.com:daniel1994' #Web2py logsin gmail by using the previous data
+#Created by Daniel F Martinez
 
 # -------------------------------------------------------------------------
 # configure auth policy
 # -------------------------------------------------------------------------
-auth.settings.registration_requires_verification = True
-auth.settings.registration_requires_approval = False
-auth.settings.reset_password_requires_verification = True
+auth.settings.registration_requires_verification = False #The user doesn't need authentication to register
+auth.settings.registration_requires_approval = False #The user doesn't need the approval of an adminstrator to register
+auth.settings.reset_password_requires_verification = True #Verification is neccessary to reset the password
 
 # -------------------------------------------------------------------------
 # Define your tables below (or better in another model file) for example

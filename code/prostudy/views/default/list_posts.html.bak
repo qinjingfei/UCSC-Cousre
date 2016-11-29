@@ -1,0 +1,26 @@
+{{extend 'layout.html'}}
+
+<h1>Share your experience</h1>
+<a href={{=URL('create_post')}} class="btn btn-success" role="button">Post Something</a>
+<!-- Creates a button. When pressed, it calls the python function create_post -->
+
+<br>  </br>
+{{for row in rows:}}
+<div class="well">
+    <a href={{=URL('view_post',args=(row.id))}}>{{=row.title}} </a>
+    by {{=row.created_by.first_name}}
+</div>
+{{pass}}
+<!-- Display all posts titles and set them to link to its right post -->
+
+{{if page>0:}}
+    <a href={{=URL(args=(page-1))}} class="btn btn-primary" role="button">Previous</a>
+{{pass}}
+<!-- if the current page is more than 0, then display button that goes back to the previos page-->
+
+{{if len(rows)>=10:}}
+    <a href={{=URL(args=(page+1))}} class="btn btn-primary" role="button">Next</a>
+{{pass}}
+<!-- If the number of posts is greater a 10, create a next button than starts another post page -->
+
+<br>  </br>

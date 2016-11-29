@@ -1,0 +1,28 @@
+{{extend 'layout.html'}}
+<div class="well">
+    <h1>{{=post.title}}</h1>
+        <div style="white-space:pre-wrap;"> {{=post.body}} </div>
+</div>
+<!-- Display all posts titles and set them to link its right post -->
+
+{{if field_var_created_by == auth.user_id:}}
+    <a href={{=URL('edit_post',args=((post.id),page))}} class="btn btn-danger" role="button">Edit Post</a>
+{{pass}}
+<!-- Create a button to edit the post -->
+
+{{=form}}
+
+<h1>Comments</h1>
+ {{if number_of_comments != 0:}}
+    {{for newcomm in comment:}}
+        <div class="well">
+            <div style="white-space:pre-wrap;">{{=newcomm.body}} <font color="blue">by {{=newcomm.created_by.first_name}}</font></div>
+        </div>
+    {{pass}}
+ {{pass}}
+
+<!-- display all the comments -->
+
+<a href={{=URL('list_posts',args=page)}} class="btn btn-success" role="button">Go Back</a>
+
+<br> </br>

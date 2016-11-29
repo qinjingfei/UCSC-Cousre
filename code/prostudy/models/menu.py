@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 response.logo = A(B('ProStudy'), XML('&trade;&nbsp;'),
-                  _class="navbar-brand", _href="http://www.web2py.com/",
+                  _class="navbar-brand", _href="#",
                   _id="web2py-logo")
 response.title = request.application.replace('_', ' ').title()
 response.subtitle = ''
@@ -28,18 +28,24 @@ response.google_analytics_id = None
 # this is the main application menu add/remove items as required
 # ----------------------------------------------------------------------------------------------------------------------
 
+#navigation bar
 response.menu = [
-    (T('Home'), False, URL('default', 'BG'), [])
+    (T('Home'), False, URL('default', 'BG'), []) #Create a new link on the navigation bar
 ]
 
 response.menu += [
-    (T('APP'), False, URL('default', 'index'), [])
+    (T('APP'), False, URL('default', 'index'), []) #Add a new a link
 ]
 
 response.menu += [
     (T('Help'), False, URL('default', 'help'), [])
 ]
 
+response.menu += [
+    (T('Feedback'), False, URL('default', 'list_posts'), [])
+]
+
+#Created by Daniel F Martinez
 
 
 
